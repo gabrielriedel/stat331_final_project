@@ -17,16 +17,16 @@ When you click the **Render** button a document will be generated that includes 
 library(tidyverse)
 library(knitr)
 
-income <- read.csv("data/avg_daily_income.csv")
-women <- read.csv("data/mean_years_in_school_women_25_34_years.csv")
+income <- read_csv("data/avg_daily_income.csv")
+women <- read_csv("data/mean_years_in_school_women_25_34_years.csv")
 
 income_longer <- income |> 
-  pivot_longer(cols = `X1800`:`X2100`, 
+  pivot_longer(cols = `1800`:`2100`, 
                names_to = "Year", 
                values_to = "Income")
 
 women_longer <- women |> 
-  pivot_longer(cols = `X1970`:`X2015`, 
+  pivot_longer(cols = `1970`:`2015`, 
                names_to = "Year", 
                values_to = "Number of Years in School")
 ```
