@@ -36,3 +36,8 @@ women_longer <- women |>
   In this analysis, we will use two variables, average daily income and average years in school of women ages 25-34. Our first dataset includes information on the average daily income in 2017 dollars  from the year 1800 to 2100 (projected). Our second dataset includes the mean number of years enrolled in school for women between the ages 25-34 from 1970 to 2015. 
   Each observation is uniquely identified by a different country. Our analysis will include the years shared by both datasets (1970-2015) and the shared countries (188 in common). 
 
+### Hypothesized Variable Relationship
+We hypothesize that nations with women that have spent more years in school between ages 25 and 34 will have a higher average daily income because women in this age range may have also completed graduate-level education. 
+
+### Data Cleaning Process:
+Our datasets did not have any N/A values or inconsistent data types. As a result of joining the datasets, information on average daily income before 1970 and after 2015 were removed from the analysis. Additionally, since the income dataset included each other, joining the datasets removed entries that were not matched in both sets. 
