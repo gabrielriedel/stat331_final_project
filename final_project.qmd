@@ -27,10 +27,8 @@ women_longer <- women |>
 
 ```{r}
 #| echo: false
-
-income_women <- income_longer |> 
-  full_join(women_longer, by = join_by(Year, country))
-
+full_data <- income_longer |> 
+  inner_join(women_longer, by = join_by(Year, country))
 ```
 
 # PC3 Write-up
