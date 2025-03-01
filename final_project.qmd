@@ -1,16 +1,18 @@
 ---
-title: "final_project"
+title: "PC3"
 author: "Gabe Riedel, Lena Kimura, Diego Jara, Drew Cloughley"
 format: html
 editor: visual
 ---
 
 ```{r load-packages}
+#| output: false
 library(tidyverse)
 library(knitr)
 ```
 
 ```{r data-pivot}
+#| output: false
 income <- read_csv("data/avg_daily_income.csv")
 women <- read_csv("data/mean_years_in_school_women_25_34_years.csv")
 
@@ -26,7 +28,6 @@ women_longer <- women |>
 ```
 
 ```{r}
-#| echo: false
 full_data <- income_longer |> 
   inner_join(women_longer, by = join_by(Year, country))
 ```
