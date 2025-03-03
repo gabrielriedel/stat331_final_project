@@ -58,5 +58,6 @@ full_data |>
   geom_point()+
   labs(x = "Number of Years in School", 
        y = "Income", 
-       title = " " )
+       title = " ")+
+  theme_bw()
 ```
