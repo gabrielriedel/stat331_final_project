@@ -58,7 +58,9 @@ full_data |>
   geom_point()+
   labs(x = "Number of Years in School", 
        y = "Income", 
-       title = " " )
+       title = "Income and Number of Years in School by Women across the World",
+       subtitle = "Income and School Years were Averaged across Country")+
+  theme_bw()
 ```
 
 ### 2.2 Linear Regression
