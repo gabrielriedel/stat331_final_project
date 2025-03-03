@@ -9,6 +9,7 @@ editor: visual
 #| output: false
 library(tidyverse)
 library(knitr)
+library(gganimate)
 ```
 
 ```{r data-pivot}
