@@ -63,7 +63,7 @@ full_data |>
 
 ### 2.2 Linear Regression
 
-$Log_{10}(MeanIncome) = 0.3088 + 0.0959*MeanEducation $
+$$Log_{10}(MeanIncome) = 0.3088 + 0.0959*MeanEducation $$
 
 Because we took the base-10 logarithm of the mean income by country, a slope of 0.0959 indicates that income increases by estimate of 24.71% for every additional year of education for women ages 25-24. At 0 years of education, average income is approximately $2.04. 
 
