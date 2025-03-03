@@ -60,3 +60,17 @@ full_data |>
        y = "Income", 
        title = " " )
 ```
+
+
+### 2.2 Linear Regression
+```{r}
+regression_model<- full_data |> 
+  group_by(country) |> 
+  mutate(mean_inc = mean(Income)) |> 
+  mutate(mean_educ = mean(`Number of Years in School`))
+
+lm_income_educ <- lm(log10(mean_inc) ~ mean_educ, data = regression_model)
+summary(lm_income_educ)
+
+$Y = 0.3088 + 0.0959x $
+```
