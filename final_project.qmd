@@ -77,3 +77,9 @@ regression_model<- full_data |>
 lm_income_educ <- lm(log10(mean_inc) ~ mean_educ, data = regression_model)
 summary(lm_income_educ)
 ```
+
+
+### 2.3 Model Fit
+```{r}
+lm_income_educ
+```
