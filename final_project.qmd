@@ -49,12 +49,12 @@ Our datasets did not have any N/A values or inconsistent data types. As a result
 
 ```{r}
 full_data |> 
-  filter(Year == 1991) |> 
-  ggplot(aes(x = `Number of Years in School`, y = Income))+
-  geom_point()
-
-full_data |> 
-  filter(Year == 2015) |> 
-  ggplot(aes(x = `Number of Years in School`, y = Income))+
-  geom_point()
+  group_by(country) |> 
+  mutate(avg_income = mean(Income), 
+         avg_school = mean(`Number of Years in School`)) |>
+  ggplot(aes(x = avg_school, y = avg_income))+
+  geom_point()+
+  labs(x = "Number of Years in School", 
+       y = "Income", 
+       title = " " )
 ```
