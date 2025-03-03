@@ -1,5 +1,5 @@
 ---
-title: "PC3"
+title: "STAT 331 Final Project"
 author: "Gabe Riedel, Lena Kimura, Diego Jara, Drew Cloughley"
 format: html
 editor: visual
@@ -11,6 +11,8 @@ library(tidyverse)
 library(knitr)
 library(gganimate)
 ```
+
+# PC3 Code
 
 ```{r data-pivot}
 #| output: false
