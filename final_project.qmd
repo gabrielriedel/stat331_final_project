@@ -68,7 +68,6 @@ full_data |>
   theme_bw()
 ```
 
-<<<<<<< HEAD
 ```{r}
 animation <- full_data |> 
   mutate(Year = as.numeric(Year)) |> 
@@ -83,8 +82,6 @@ anim
 # anim_save("gganimate-1.gif", anim)
 ```
 
-=======
->>>>>>> a69ffde2a4a606139e08f1714429f32de42170a0
 ### 2.2 Linear Regression
 
 $$Log_{10}(MeanIncome) = 0.3088 + 0.0959*MeanEducation $$
@@ -100,9 +97,4 @@ regression_model<- full_data |>
 
 lm_income_educ <- lm(log10(mean_inc) ~ mean_educ, data = regression_model)
 summary(lm_income_educ)
-<<<<<<< HEAD
-
 ```
-=======
-```
->>>>>>> a69ffde2a4a606139e08f1714429f32de42170a0
