@@ -10,6 +10,7 @@ editor: visual
 library(tidyverse)
 library(knitr)
 library(gganimate)
+library(gifski)
 ```
 
 # PC3 Code
@@ -49,6 +50,10 @@ We hypothesize that nations with women that have spent more years in school betw
 
 Our datasets did not have any N/A values or inconsistent data types. As a result of joining the datasets, information on average daily income before 1970 and after 2015 were removed from the analysis. Additionally, since the income dataset included each other, joining the datasets removed entries that were not matched in both sets.
 
+
+
+
+### 2.1
 ```{r}
 full_data |> 
   group_by(country) |> 
@@ -61,6 +66,19 @@ full_data |>
        title = " " )
 ```
 
+```{r}
+animation <- full_data |> 
+  mutate(Year = as.numeric(Year)) |> 
+  ggplot(aes(x = `Number of Years in School`, y = Income)) +
+  geom_point()
+
+anim <- animation + transition_time(Year) +
+  ease_aes("linear")
+
+anim
+
+# anim_save("gganimate-1.gif", anim)
+```
 
 ### 2.2 Linear Regression
 ```{r}
@@ -72,5 +90,4 @@ regression_model<- full_data |>
 lm_income_educ <- lm(log10(mean_inc) ~ mean_educ, data = regression_model)
 summary(lm_income_educ)
 
-$Y = 0.3088 + 0.0959x $
 ```
