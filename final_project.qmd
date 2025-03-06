@@ -10,6 +10,7 @@ editor: visual
 library(tidyverse)
 library(knitr)
 library(gganimate)
+library(gifski)
 ```
 
 # PC3 Code
@@ -33,6 +34,44 @@ women_longer <- women |>
 ```{r}
 full_data <- income_longer |> 
   inner_join(women_longer, by = join_by(Year, country))
+
+full_data <- full_data |> 
+  mutate(Region = fct_collapse(factor(country),
+    "North America" = c("Canada", "USA", "Mexico", "Belize", "Costa Rica", "El Salvador", "Guatemala", 
+                        "Honduras","Nicaragua", "Panama"),
+    "South America" = c("Argentina", "Bolivia", "Brazil", "Chile", "Colombia", "Ecuador", 
+                        "Guyana", "Paraguay", "Peru", "Suriname", "Uruguay", "Venezuela"),
+    "Caribbean" = c("Antigua and Barbuda", "Bahamas", "Barbados", "Cuba", "Dominica", 
+                    "Dominican Republic", "Grenada", "Haiti", "Jamaica", "St. Lucia", 
+                    "St. Vincent and the Grenadines", "Trinidad and Tobago"),
+    "Europe" = c("Andorra","Austria", "Belgium", "France", "Germany", "Luxembourg", "Netherlands",
+                 "Switzerland", "UK", "Belarus", "Bulgaria", "Croatia", "Czech Republic",
+                 "Estonia", "Hungary", "Latvia", "Lithuania", "Moldova", "Poland", "Romania", 
+                 "Russia", "Slovak Republic", "Ukraine", "Albania", "Bosnia and Herzegovina", 
+                 "Cyprus", "Greece", "Italy", "Malta", "Montenegro", "Portugal", "Serbia", 
+                 "Slovenia", "Spain", "North Macedonia", "Denmark", "Finland", "Iceland", 
+                 "Ireland", "Norway", "Sweden"),
+    "Middle East" = c("Bahrain", "Egypt", "Iran", "Iraq", "Israel", "Palestine", "Jordan", "Kuwait",
+                      "Lebanon", "Oman", "Qatar", "Saudi Arabia", "UAE", "Yemen", "Turkey", "Syria",
+                      "Armenia", "Azerbaijan", "Georgia"),
+    "Asia" = c("Afghanistan", "Bangladesh", "Bhutan", "India", "Maldives", "Nepal", "Pakistan",
+                     "Sri Lanka", "Uzbekistan", "Turkmenistan", "Tajikistan", "Kyrgyz Republic",
+                     "Kazakhstan", "Brunei", "Cambodia", "Indonesia", "Lao", "Malaysia", "Myanmar",     
+                     "Philippines", "Singapore", "Thailand", "Timor-Leste", "Vietnam", "China", "Japan",  
+                     "North Korea", "South Korea", "Mongolia", "Taiwan"),
+    "Oceania" = c("Australia", "Fiji", "Kiribati", "Marshall Islands", "New Zealand", "Papua New Guinea",
+                  "Solomon Islands", "Tonga", "Vanuatu", "Micronesia, Fed. Sts.", "Samoa"),
+    "Africa" = c("Algeria", "Benin", "Burkina Faso", "Cape Verde", "Chad", "Comoros", 
+                 "Cote d'Ivoire", "Djibouti", "Eritrea", "Gambia", "Ghana", "Liberia", "Libya",
+                 "Mali", "Mauritania", "Mauritius", "Morocco", "Niger", "Nigeria",
+                 "Burundi", "Cameroon", "Central African Republic", "Congo, Dem. Rep.", 
+                 "Congo, Rep.", "Ethiopia", "Equatorial Guinea", "Gabon", "Guinea",
+                 "Guinea-Bissau", "Kenya", "Rwanda", "Seychelles", "Somalia", "South Sudan",
+                 "Namibia", "Uganda", "Sao Tome and Principe", "Senegal", "Sierra Leone",
+                 "Sudan", "Togo", "Tunisia", "Angola", "Botswana", "Eswatini", "Lesotho", "Madagascar",
+                 "Malawi", "Mozambique", "South Africa", "Tanzania", "Zambia", "Zimbabwe")
+    
+  ))
 ```
 
 # PC3 Write-up
@@ -49,25 +88,48 @@ We hypothesize that nations with women that have spent more years in school betw
 
 Our datasets did not have any N/A values or inconsistent data types. As a result of joining the datasets, information on average daily income before 1970 and after 2015 were removed from the analysis. Additionally, since the income dataset included each other, joining the datasets removed entries that were not matched in both sets.
 
+
+
+
+### 2.1
 ```{r}
 full_data |> 
   group_by(country) |> 
   mutate(avg_income = mean(Income), 
          avg_school = mean(`Number of Years in School`)) |>
-  ggplot(aes(x = avg_school, y = avg_income))+
-  geom_point()+
+  ggplot(aes(x = avg_school, y = avg_income, color = Region)) +
+  geom_point() +
   labs(x = "Number of Years in School", 
        y = "Income", 
        title = "Income and Number of Years in School by Women across the World",
-       subtitle = "Income and School Years were Averaged across Country")+
+       subtitle = "Income and School Years were Averaged across Country") +
   theme_bw()
+```
+
+```{r}
+animation <- full_data |> 
+  mutate(Year = as.numeric(Year)) |> 
+  ggplot(aes(x = `Number of Years in School`, y = Income, color = Region)) +
+  geom_point() +
+  labs(x = "Number of Years in School", 
+       y = "Income", 
+       title = "Income and Number of Years in School by Women across the World 1970-2015",
+       subtitle = "Income and School Years across Country and Region") +
+  theme_bw()
+
+anim <- animation + transition_time(Year) +
+  ease_aes("linear")
+
+anim
+
 ```
 
 ### 2.2 Linear Regression
 
 $$Log_{10}(MeanIncome) = 0.3088 + 0.0959*MeanEducation $$
 
-Because we took the base-10 logarithm of the mean income by country, a slope of 0.0959 indicates that income increases by estimate of 24.71% for every additional year of education for women ages 25-24. At 0 years of education, average income is approximately \$2.04.
+Because we took the base-10 logarithm of the mean income by country, a slope of 0.0959 indicates that income increases by estimate of 24.71% for every additional year of education for women ages 25-24. At 0 years of education, average income is approximately $2.04. 
+
 
 ```{r}
 regression_model<- full_data |> 
@@ -78,3 +140,5 @@ regression_model<- full_data |>
 lm_income_educ <- lm(log10(mean_inc) ~ mean_educ, data = regression_model)
 summary(lm_income_educ)
 ```
+
+# Diego change
