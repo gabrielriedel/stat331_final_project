@@ -1,8 +1,19 @@
 ---
 title: "STAT 331 Final Project"
 author: "Gabe Riedel, Lena Kimura, Diego Jara, Drew Cloughley"
-format: html
-editor: visual
+format: 
+  html:
+    code-tools: true
+    toc: true
+    embed-resources: true
+    html-table-processing: none
+editor: source
+execute: 
+  error: true
+  echo: true
+  message: false
+  warning: false
+code-fold: true
 ---
 
 ```{r load-packages}
@@ -11,6 +22,8 @@ library(tidyverse)
 library(knitr)
 library(gganimate)
 library(gifski)
+library(kableExtra)
+library(glue)
 ```
 
 # PC3 Code
@@ -88,7 +101,9 @@ We hypothesize that nations with women that have spent more years in school betw
 
 Our datasets did not have any N/A values or inconsistent data types. As a result of joining the datasets, information on average daily income before 1970 and after 2015 were removed from the analysis. Additionally, since the income dataset included each other, joining the datasets removed entries that were not matched in both sets.
 
-### 2.1
+# PC4
+
+### 2.1 Data Visualization
 
 ```{r}
 full_data |> 
@@ -131,13 +146,39 @@ $$Log_{10}(MeanIncome) = 0.3088 + 0.0959*MeanEducation $$
 Because we took the base-10 logarithm of the mean income by country, a slope of 0.0959 indicates that income increases by estimate of 24.71% for every additional year of education for women ages 25-24. At 0 years of education, average income is approximately \$2.04.
 
 ```{r}
-regression_model<- full_data |> 
+regression_model_data <- 
+  full_data |> 
   group_by(country) |> 
   mutate(mean_inc = mean(Income)) |> 
   mutate(mean_educ = mean(`Number of Years in School`))
 
-lm_income_educ <- lm(log10(mean_inc) ~ mean_educ, data = regression_model)
+lm_income_educ <- lm(log10(mean_inc) ~ mean_educ, data = regression_model_data)
 summary(lm_income_educ)
 ```
 
-# Diego change
+### 2.3 Model Fit
+
+```{R}
+var_response <- var(log10(regression_model_data$mean_inc))
+var_fitted <- var(lm_income_educ$fitted)
+var_residuals <- var(lm_income_educ$residuals)
+
+var_table <- data.frame(c("Variance in Response", "Variance in Fitted Values", "Variance in Residuals"),
+                        c(var_response, var_fitted, var_residuals))
+
+var_table |>
+  kable(col.names = c("Metric", "Variance")) |>
+  kable_styling(full_width = FALSE, 
+                bootstrap_options = c("striped", "hover")) |>
+  add_header_above(c("Response Variability" = 2)) |>
+  row_spec(0, bold = TRUE, color = "black")
+```
+
+```{r}
+var_prop_explained <- round(var_fitted/var_response,4) * 100
+var_prop_unexplained <- round(var_residuals/var_response,4) * 100
+var_percent_explained <- glue("{var_prop_explained}%")
+var_percent_unexplained <- glue("{var_prop_unexplained}%")
+```
+The percent of variability explained by the model is `r var_percent_explained`. This means our model is accounting for a moderate amount of variability. There is still `r var_percent_unexplained` unexplained by the model, so other factors outside of years in school are influencing this response. Overall, for simple linear regression, our model is of moderate to high quality.
+
