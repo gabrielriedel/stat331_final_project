@@ -116,7 +116,7 @@ full_data |>
   theme_bw()
 ```
 
-In the scatterplot above, every dot on the graph represents a different country where they are colored by their corresponding region. The x-axis represents the average number of years that women are in school, where the y-axis projects the average daily income for a household. To properly display all the data from the years 1970 to 2015, the average of both variables was taken respective to the county and placed on the scatterplot above.
+In the scatterplot above, every dot on the graph represents a different country where they are colored by their corresponding region. The x-axis represents the average number of years that women are in school, where the y-axis displays the average daily income for a household. To properly display all the data from the years 1970 to 2015, the average of both variables was taken respective to the county and placed on the scatterplot above.
 
 ```{r}
 animation <- full_data |> 
@@ -150,7 +150,7 @@ regression_model_data <-
   mutate(mean_educ = mean(`Number of Years in School`))
 
 lm_income_educ <- lm(log10(mean_inc) ~ mean_educ, data = regression_model_data)
-tidy(lm_income_educ)
+kable(tidy(lm_income_educ))
 ```
 
 ### 2.3 Model Fit
