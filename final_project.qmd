@@ -153,6 +153,19 @@ lm_income_educ <- lm(log10(mean_inc) ~ mean_educ, data = regression_model_data)
 tidy(lm_income_educ)
 ```
 
+```{r}
+regression_model_data |> 
+  ggplot(aes(x = mean_educ, 
+             y = log10(mean_inc))) +
+           geom_point() + 
+  geom_smooth(method = lm) +
+  labs(x = "Number of Years in School", 
+       y = "Log10(Average Daily Income in 2017 Dollars)",
+              title = "Log10Income and Number of Years in School for Women across the World",
+       subtitle = "Income and number of years in school were averaged across country") +
+  theme_bw()
+```
+
 ### 2.3 Model Fit
 
 ```{R}
