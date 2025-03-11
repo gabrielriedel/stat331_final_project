@@ -24,7 +24,6 @@ library(gganimate)
 library(gifski)
 library(kableExtra)
 library(glue)
-library(broom)
 ```
 
 # PC3 Code
@@ -42,7 +41,7 @@ income_longer <- income |>
 women_longer <- women |> 
   pivot_longer(cols = `1970`:`2015`, 
                names_to = "Year", 
-               values_to = "Number of Years in School")
+               values_to = "years_in_school")
 ```
 
 ```{r}
@@ -106,7 +105,7 @@ We hypothesize that nations with women that have spent more years in school betw
 full_data |> 
   group_by(country) |> 
   mutate(avg_income = mean(Income), 
-         avg_school = mean(`Number of Years in School`)) |>
+         avg_school = mean(years_in_school)) |>
   ggplot(aes(x = avg_school, y = avg_income, color = Region)) +
   geom_point() +
   labs(x = "Number of Years in School", 
@@ -121,7 +120,7 @@ In the scatterplot above, every dot on the graph represents a different country 
 ```{r}
 animation <- full_data |> 
   mutate(Year = as.numeric(Year)) |> 
-  ggplot(aes(x = `Number of Years in School`, y = Income, color = Region)) +
+  ggplot(aes(x = years_in_school, y = Income, color = Region)) +
   geom_point() +
   labs(x = "Number of Years in School", 
        y = "Income", 
@@ -147,10 +146,10 @@ regression_model_data <-
   full_data |> 
   group_by(country) |> 
   mutate(mean_inc = mean(Income)) |> 
-  mutate(mean_educ = mean(`Number of Years in School`))
+  mutate(mean_educ = mean(years_in_school))
 
 lm_income_educ <- lm(log10(mean_inc) ~ mean_educ, data = regression_model_data)
-tidy(lm_income_educ)
+summary(lm_income_educ)
 ```
 
 ### 2.3 Model Fit
@@ -179,3 +178,64 @@ var_percent_unexplained <- glue("{var_prop_unexplained}%")
 ```
 
 The percent of variability explained by the model is `r var_percent_explained`. This means our model is accounting for a moderate amount of variability. There is still `r var_percent_unexplained` unexplained by the model, so other factors outside of years in school are influencing this response. Overall, for simple linear regression, our model is of moderate to high quality.
+
+
+# Simulation
+
+### 3.1
+
+```{r}
+model_predict <- predict(lm_income_educ)
+est_sigma <- sigma(lm_income_educ)
+```
+
+```{r}
+rand_error <- function(x, mean = 0, sd){
+  return(x + rnorm(length(x), mean, sd))
+}
+```
+
+```{r}
+set.seed(1245124)
+sim_response <- tibble(sim_income_pred = rand_error(x=model_predict, 
+                                                    sd=est_sigma))
+combined_data <- full_data |> 
+  select(years_in_school, Income, country) |> 
+  bind_cols(sim_response)
+```
+
+```{r}
+combined_data |>
+  group_by(country) |> 
+  mutate(avg_income = mean(Income), 
+         avg_school = mean(years_in_school),
+         avg_sim_income = mean(sim_income_pred)) |>
+  ggplot(aes(x=avg_school, y=avg_sim_income)) +
+  geom_point() +
+  labs(x="Simulated Income", 
+       y="",
+       subtitle="Observed Income",
+       title="Simulated Income vs. Observed Income") +
+  theme_minimal()
+```
+
+```{r}
+combined_data |>
+  group_by(country) |> 
+  mutate(avg_income = mean(Income), 
+         avg_school = mean(years_in_school),
+         avg_sim_income = mean(sim_income_pred)) |> 
+  ggplot(aes(x = avg_sim_income, 
+             y = log10(avg_income))
+         ) + 
+  geom_point() + 
+   labs(x = "Simulated Body Mass (g)", 
+        y = "",
+        subtitle = "Observed Body Mass (g)" ) + 
+  geom_abline(slope = 1,
+              intercept = 0, 
+              color = "steelblue",
+              linetype = "dashed",
+              lwd = 1.5) +
+  theme_bw()
+```
