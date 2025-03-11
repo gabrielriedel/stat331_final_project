@@ -25,6 +25,7 @@ library(gifski)
 library(kableExtra)
 library(glue)
 library(broom)
+library(bibtex)
 ```
 
 # PC3 Code
@@ -51,40 +52,46 @@ full_data <- income_longer |>
 
 full_data <- full_data |> 
   mutate(Region = fct_collapse(factor(country),
-    "North America" = c("Canada", "USA", "Mexico", "Belize", "Costa Rica", "El Salvador", "Guatemala", 
-                        "Honduras","Nicaragua", "Panama"),
+    "North America" = c("Canada", "USA", "Mexico"),
     "South America" = c("Argentina", "Bolivia", "Brazil", "Chile", "Colombia", "Ecuador", 
                         "Guyana", "Paraguay", "Peru", "Suriname", "Uruguay", "Venezuela"),
-    "Caribbean" = c("Antigua and Barbuda", "Bahamas", "Barbados", "Cuba", "Dominica", 
-                    "Dominican Republic", "Grenada", "Haiti", "Jamaica", "St. Lucia", 
-                    "St. Vincent and the Grenadines", "Trinidad and Tobago"),
-    "Europe" = c("Andorra","Austria", "Belgium", "France", "Germany", "Luxembourg", "Netherlands",
-                 "Switzerland", "UK", "Belarus", "Bulgaria", "Croatia", "Czech Republic",
-                 "Estonia", "Hungary", "Latvia", "Lithuania", "Moldova", "Poland", "Romania", 
-                 "Russia", "Slovak Republic", "Ukraine", "Albania", "Bosnia and Herzegovina", 
-                 "Cyprus", "Greece", "Italy", "Malta", "Montenegro", "Portugal", "Serbia", 
-                 "Slovenia", "Spain", "North Macedonia", "Denmark", "Finland", "Iceland", 
-                 "Ireland", "Norway", "Sweden"),
-    "Middle East" = c("Bahrain", "Egypt", "Iran", "Iraq", "Israel", "Palestine", "Jordan", "Kuwait",
-                      "Lebanon", "Oman", "Qatar", "Saudi Arabia", "UAE", "Yemen", "Turkey", "Syria",
-                      "Armenia", "Azerbaijan", "Georgia"),
-    "Asia" = c("Afghanistan", "Bangladesh", "Bhutan", "India", "Maldives", "Nepal", "Pakistan",
-                     "Sri Lanka", "Uzbekistan", "Turkmenistan", "Tajikistan", "Kyrgyz Republic",
-                     "Kazakhstan", "Brunei", "Cambodia", "Indonesia", "Lao", "Malaysia", "Myanmar",     
-                     "Philippines", "Singapore", "Thailand", "Timor-Leste", "Vietnam", "China", "Japan",  
-                     "North Korea", "South Korea", "Mongolia", "Taiwan"),
-    "Oceania" = c("Australia", "Fiji", "Kiribati", "Marshall Islands", "New Zealand", "Papua New Guinea",
-                  "Solomon Islands", "Tonga", "Vanuatu", "Micronesia, Fed. Sts.", "Samoa"),
-    "Africa" = c("Algeria", "Benin", "Burkina Faso", "Cape Verde", "Chad", "Comoros", 
-                 "Cote d'Ivoire", "Djibouti", "Eritrea", "Gambia", "Ghana", "Liberia", "Libya",
-                 "Mali", "Mauritania", "Mauritius", "Morocco", "Niger", "Nigeria",
-                 "Burundi", "Cameroon", "Central African Republic", "Congo, Dem. Rep.", 
-                 "Congo, Rep.", "Ethiopia", "Equatorial Guinea", "Gabon", "Guinea",
-                 "Guinea-Bissau", "Kenya", "Rwanda", "Seychelles", "Somalia", "South Sudan",
-                 "Namibia", "Uganda", "Sao Tome and Principe", "Senegal", "Sierra Leone",
-                 "Sudan", "Togo", "Tunisia", "Angola", "Botswana", "Eswatini", "Lesotho", "Madagascar",
-                 "Malawi", "Mozambique", "South Africa", "Tanzania", "Zambia", "Zimbabwe")
-    
+    "Central America" = c("Antigua and Barbuda", "Bahamas", "Barbados", "Cuba", "Dominica", 
+                          "Dominican Republic", "Grenada", "Haiti", "Jamaica", "St. Lucia", 
+                          "St. Vincent and the Grenadines", "Trinidad and Tobago", "Belize", 
+                          "Costa Rica", "El Salvador", "Guatemala", "Honduras","Nicaragua", 
+                          "Panama"),
+    "Europe" = c("Andorra","Austria", "Belgium", "France", "Germany", "Luxembourg",
+                 "Netherlands", "Switzerland", "UK", "Belarus", "Bulgaria", "Croatia", 
+                 "Czech Republic", "Estonia", "Hungary", "Latvia", "Lithuania", "Moldova",
+                 "Poland", "Romania", "Russia", "Slovak Republic", "Ukraine", "Albania", 
+                 "Bosnia and Herzegovina", "Cyprus", "Greece", "Italy", "Malta", "Montenegro",
+                 "Portugal", "Serbia", "Slovenia", "Spain", "North Macedonia", "Denmark",
+                 "Finland", "Iceland", "Ireland", "Norway", "Sweden"),
+    "Middle East and North Africa" = c("Bahrain", "Egypt", "Iran", "Iraq", "Israel", 
+                                       "Palestine", "Jordan", "Kuwait", "Lebanon", "Oman",
+                                       "Qatar", "Saudi Arabia", "UAE", "Yemen", "Turkey",
+                                       "Syria", "Armenia", "Azerbaijan", "Georgia", 
+                                       "Afghanistan",  "Libya",  "Morocco",  "Pakistan",  
+                                       "Somalia",  "Tunisia"),
+    "Asia" = c("Bangladesh", "Bhutan", "India", "Maldives", "Nepal",
+               "Sri Lanka", "Uzbekistan", "Turkmenistan", "Tajikistan", "Kyrgyz Republic",
+               "Kazakhstan", "Brunei", "Cambodia", "Indonesia", "Lao", "Malaysia",
+               "Myanmar", "Philippines", "Singapore", "Thailand", "Timor-Leste", "Vietnam",
+               "China", "Japan", "North Korea", "South Korea", "Mongolia", "Taiwan"),
+    "Oceania" = c("Australia", "Fiji", "Kiribati", "Marshall Islands", "New Zealand", 
+                  "Papua New Guinea", "Solomon Islands", "Tonga", "Vanuatu", 
+                  "Micronesia, Fed. Sts.", "Samoa"),
+    "Sub-Saharan Africa" = c("Algeria", "Benin", "Burkina Faso", "Cape Verde", "Chad", 
+                             "Comoros", "Cote d'Ivoire", "Djibouti", "Eritrea", "Gambia", 
+                             "Ghana", "Liberia", "Mali", "Mauritania", "Mauritius","Niger", 
+                             "Nigeria","Burundi", "Cameroon", "Central African Republic", 
+                             "Congo, Dem. Rep.", "Congo, Rep.", "Ethiopia", "Equatorial Guinea",
+                             "Gabon", "Guinea", "Guinea-Bissau", "Kenya", "Rwanda",
+                             "Seychelles","South Sudan", "Namibia", "Uganda", 
+                             "Sao Tome and Principe", "Senegal", "Sierra Leone", "Sudan", 
+                             "Togo","Angola", "Botswana", "Eswatini", "Lesotho", "Madagascar", 
+                             "Malawi", "Mozambique", "South Africa", "Tanzania", "Zambia", 
+                             "Zimbabwe")
   ))
 ```
 
@@ -119,6 +126,9 @@ full_data |>
 In the scatterplot above, every dot on the graph represents a different country where they are colored by their corresponding region. The x-axis represents the average number of years that women are in school, where the y-axis projects the average daily income for a household. To properly display all the data from the years 1970 to 2015, the average of both variables was taken respective to the county and placed on the scatterplot above.
 
 ```{r}
+# animation functions found in R graph gallery page
+# https://r-graph-gallery.com/package/gganimate.html
+
 animation <- full_data |> 
   mutate(Year = as.numeric(Year)) |> 
   ggplot(aes(x = `Number of Years in School`, y = Income, color = Region)) +
@@ -179,3 +189,30 @@ var_percent_unexplained <- glue("{var_prop_unexplained}%")
 ```
 
 The percent of variability explained by the model is `r var_percent_explained`. This means our model is accounting for a moderate amount of variability. There is still `r var_percent_unexplained` unexplained by the model, so other factors outside of years in school are influencing this response. Overall, for simple linear regression, our model is of moderate to high quality.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### References
+```{r}
+
+```
+
