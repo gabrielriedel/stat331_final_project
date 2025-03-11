@@ -24,6 +24,7 @@ library(gganimate)
 library(gifski)
 library(kableExtra)
 library(glue)
+library(broom)
 ```
 
 # PC3 Code
