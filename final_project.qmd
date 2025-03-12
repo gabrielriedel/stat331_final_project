@@ -207,34 +207,6 @@ var_percent_unexplained <- glue("{var_prop_unexplained}%")
 
 The percent of variability explained by the model is `r var_percent_explained`. This means our model is accounting for a moderate amount of variability. There is still `r var_percent_unexplained` unexplained by the model, so other factors outside of years in school are influencing this response. Overall, for simple linear regression, our model is of moderate to high quality.
 
-
-<<<<<<< HEAD
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-### References
-```{r}
-
-```
-
-=======
 # Simulation
 
 ### 3.1
@@ -294,4 +266,12 @@ combined_data |>
               lwd = 1.5) +
   theme_bw()
 ```
->>>>>>> df9a9a8e1fdd1d92e3e985c2c420cd190961b36e
+
+
+
+
+
+### References
+```{r}
+
+```
