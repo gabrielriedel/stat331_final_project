@@ -124,7 +124,7 @@ full_data |>
   theme_bw()
 ```
 
-In the scatterplot above, every dot on the graph represents a different country where they are colored by their corresponding region. The x-axis represents the average number of years that women are in school, where the y-axis displays the average daily income for a household. To properly display all the data from the years 1970 to 2015, the average of both variables was taken respective to the county and placed on the scatterplot above.
+In the scatterplot above, every dot on the graph represents a different country where they are colored by their corresponding region. The x-axis represents the average number of years that women are in school, where the y-axis displays the average daily income for a household. To properly display all the data from the years 1970 to 2015, the average of both variables was taken respective to the country and placed on the scatterplot above.
 
 ```{r}
 # animation functions found in R graph gallery page
@@ -151,7 +151,7 @@ anim
 
 $$Log_{10}(MeanIncome) = 0.3088 + 0.0959*MeanEducation $$
 
-Because we took the base-10 logarithm of the mean income by country, a slope of 0.0959 indicates that income increases by estimate of 24.71% for every additional year of education for women ages 25-24. At 0 years of education, average income is approximately \$2.04.
+Because we took the base-10 logarithm of the mean income by country, a slope of 0.0959 indicates that income increases by estimate of 24.71% for every additional year of education for women ages 25-54. At 0 years of education, average income is approximately \$2.04.
 
 ```{r}
 regression_model_data <- 
@@ -164,9 +164,7 @@ lm_income_educ <- lm(log10(mean_inc) ~ mean_educ, data = regression_model_data)
 kable(tidy(lm_income_educ))
 ```
 
-
 The $Log_{10}$ transformation of average daily income helped to linearize our model shown in the scatterplot below. Like the figure in 2.1, each dot on the graph represents a different country. The x-axis represents the average number of years that women are in school, where the y-axis displays the $Log_{10}$ of the average daily income for a household. To properly display all the data from the years 1970 to 2015, the average of both variables was taken respective to the county and placed on the scatterplot above.
-
 
 ```{r}
 regression_model_data |> 
@@ -268,3 +266,6 @@ combined_data |>
   theme_bw()
 ```
 
+### Conclusion
+
+We explored the relationship between average daily income (in 2017 dollars) and average years in school for women ages 25-34 across 8 geographic regions, and averaged over 45 years. We performed a linear regression across all countries and log-transformed average income to linearize our dataset. Our model estimated a 24.71% increase in mean income for every additional year of education for women ages 25-54. Additionally, our linear model was able to explain `r var_percent_explained` of the variance in our dataset, suggesting further predictors may better explain average income. 
