@@ -17,6 +17,8 @@ code-fold: true
 bibliography: references.bib
 ---
 
+## Data Set-Up and Cleaning
+
 ```{r load-packages}
 #| output: false
 library(tidyverse)
@@ -28,8 +30,6 @@ library(glue)
 library(broom)
 library(bibtex)
 ```
-
-# PC3 Code
 
 ```{r data-pivot}
 #| output: false
@@ -96,19 +96,17 @@ full_data <- full_data |>
   ))
 ```
 
-# PC3 Write-up
+## Introduction
 
 ### Data/Variable Description
 
-In this analysis, we will use two variables from Gapminder, [@Gapminder] average daily income and average years in school of women ages 25-34. Our first dataset includes information on the average daily income in 2017 dollars from the year 1800 to 2100 (projected). Our second dataset includes the mean number of years enrolled in school for women between the ages 25-34 from 1970 to 2015. Each observation is uniquely identified by a different country. Our analysis will include the years shared by both datasets (1970-2015) and the shared countries (188 in common). Our datasets did not have any missing values or inconsistent data types. In addition, we decided to divide all of the countries in the dataset into 8 distinct regions in alignment with the "Official Listing of Countries by World Region: The Eight Groupings of the World by Location and Culture." [@ThoughtCo]
+In this analysis, we will use two variables from Gapminder: [@Gapminder] average daily income, and average years in school of women ages 25-34. Our first dataset includes information on the average daily income in 2017 dollars from the year 1800 to 2100 (projected). Our second dataset includes the mean number of years enrolled in school for women between the ages 25-34 from 1970 to 2015. Each observation is uniquely identified by a different country. Our analysis will include the years shared by both datasets (1970-2015) and the shared countries (188 in common). Our datasets did not have any missing values or inconsistent data types. In addition, we decided to divide all of the countries in the dataset into 8 distinct regions in alignment with the "Official Listing of Countries by World Region: The Eight Groupings of the World by Location and Culture." [@ThoughtCo]
 
 ### Hypothesized Variable Relationship
 
-We hypothesize that nations with women that have spent more years in school between ages 25 and 34 will have a higher average daily income because women in this age range may have also completed graduate-level education.
+We hypothesize that nations with women between ages 25 and 34 that have spent more years in school will have a higher average daily income because women in this age range may have also completed graduate-level education.
 
-# PC4
-
-### 2.1 Data Visualization
+## Data Visualization
 
 ```{r}
 full_data |> 
@@ -137,7 +135,7 @@ animation <- full_data |>
   labs(x = "Number of Years in School", 
        y = "Income", 
        title = "Income and Number of Years in School by Women across the World 1970-2015",
-       subtitle = "Income and School Years across Country and Region") +
+       subtitle = "Income and School Years across Country") +
   theme_bw()
 
 anim <- animation + transition_time(Year) +
@@ -147,7 +145,7 @@ anim
 
 ```
 
-### 2.2 Linear Regression
+## Linear Regression
 
 $$Log_{10}(MeanIncome) = 0.3088 + 0.0959*MeanEducation $$
 
@@ -179,7 +177,7 @@ regression_model_data |>
   theme_bw()
 ```
 
-### 2.3 Model Fit
+## Model Fit
 
 ```{R}
 var_response <- var(log10(regression_model_data$mean_inc))
@@ -206,7 +204,7 @@ var_percent_unexplained <- glue("{var_prop_unexplained}%")
 
 The percent of variability explained by the model is `r var_percent_explained`. This means our model is accounting for a moderate amount of variability. There is still `r var_percent_unexplained` unexplained by the model, so other factors outside of years in school are influencing this response. Overall, for simple linear regression, our model is of moderate to high quality.
 
-# Simulation
+## Simulation
 
 ### 3.1
 
@@ -265,7 +263,10 @@ combined_data |>
               lwd = 1.5) +
   theme_bw()
 ```
+<<<<<<< HEAD
 
 ### Conclusion
 
 We explored the relationship between average daily income (in 2017 dollars) and average years in school for women ages 25-34 across 8 geographic regions, and averaged over 45 years. We performed a linear regression across all countries and log-transformed average income to linearize our dataset. Our model estimated a 24.71% increase in mean income for every additional year of education for women ages 25-54. Additionally, our linear model was able to explain `r var_percent_explained` of the variance in our dataset, suggesting further predictors may better explain average income. 
+=======
+>>>>>>> 4203147caae00b48b98e027b9fabdc4121fb25df
