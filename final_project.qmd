@@ -173,7 +173,7 @@ regression_model_data |>
   labs(x = "Number of Years in School", 
        y = "Log10(Income)",
               title = "Log Income and Number of Years in School for Women across the World",
-       subtitle = "Income and number of years in school were averaged across country") +
+       subtitle = "Income and Number of Years in School Averaged Across Country") +
   theme_bw()
 ```
 
