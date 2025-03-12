@@ -173,7 +173,7 @@ regression_model_data |>
   labs(x = "Number of Years in School", 
        y = "Log10(Income)",
               title = "Log Income and Number of Years in School for Women across the World",
-       subtitle = "Income and number of years in school were averaged across country") +
+       subtitle = "Income and Number of Years in School Averaged Across Country") +
   theme_bw()
 ```
 
@@ -266,4 +266,4 @@ combined_data |>
 
 ### Conclusion
 
-We explored the relationship between average daily income (in 2017 dollars) and average years in school for women ages 25-34 across 8 geographic regions, and averaged over 45 years. We performed a linear regression across all countries and log-transformed average income to linearize our dataset. Our model estimated a 24.71% increase in mean income for every additional year of education for women ages 25-54. Additionally, our linear model was able to explain `r var_percent_explained` of the variance in our dataset, suggesting further predictors may better explain average income. 
+We explored the relationship between average daily income (in 2017 dollars) and average years in school for women ages 25-34 across 8 geographic regions, and averaged over 45 years. We performed a linear regression across all countries and log-transformed average income to linearize our dataset. Our model estimated a 24.71% increase in mean income for every additional year of education for women ages 25-54. Additionally, our linear model was able to explain `r var_percent_explained` of the variance in our dataset, suggesting further predictors may better explain average income.
