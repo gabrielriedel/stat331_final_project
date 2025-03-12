@@ -17,6 +17,8 @@ code-fold: true
 bibliography: references.bib
 ---
 
+# Data Set-Up and Cleaning
+
 ```{r load-packages}
 #| output: false
 library(tidyverse)
@@ -28,8 +30,6 @@ library(glue)
 library(broom)
 library(bibtex)
 ```
-
-# PC3 Code
 
 ```{r data-pivot}
 #| output: false
@@ -96,7 +96,7 @@ full_data <- full_data |>
   ))
 ```
 
-# PC3 Write-up
+# Introduction
 
 ### Data/Variable Description
 
@@ -137,7 +137,7 @@ animation <- full_data |>
   labs(x = "Number of Years in School", 
        y = "Income", 
        title = "Income and Number of Years in School by Women across the World 1970-2015",
-       subtitle = "Income and School Years across Country and Region") +
+       subtitle = "Income and School Years across Country") +
   theme_bw()
 
 anim <- animation + transition_time(Year) +
@@ -164,9 +164,7 @@ lm_income_educ <- lm(log10(mean_inc) ~ mean_educ, data = regression_model_data)
 kable(tidy(lm_income_educ))
 ```
 
-
 The $Log_{10}$ transformation of average daily income helped to linearize our model shown in the scatterplot below. Like the figure in 2.1, each dot on the graph represents a different country. The x-axis represents the average number of years that women are in school, where the y-axis displays the $Log_{10}$ of the average daily income for a household. To properly display all the data from the years 1970 to 2015, the average of both variables was taken respective to the county and placed on the scatterplot above.
-
 
 ```{r}
 regression_model_data |> 
@@ -267,4 +265,3 @@ combined_data |>
               lwd = 1.5) +
   theme_bw()
 ```
-
