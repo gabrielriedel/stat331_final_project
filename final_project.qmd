@@ -254,9 +254,16 @@ obs_reg_p <- combined_data |>
 obs_reg_p + sim_reg_p
 ```
 
-### 3.2 
+### 3.2
 
+<<<<<<< HEAD
 ```{r sim-vi}
+=======
+```{r}
+# functions for this section were obtained from the textbook
+# https://manncz.github.io/stat331-calpoly-text/10-predictive-checks.html#ch10-checkins 
+
+>>>>>>> a95e2b291c25afa71507705e97d26e00bc797844
 sims <- map_dfc(.x = 1:1000,
                 .f = ~ tibble(sim = noise(model_predict, 
                                           sd = est_sigma)
@@ -293,6 +300,7 @@ tibble(sims = sim_r_sq) |>
        subtitle = "Number of Simulated Models") +
   theme_bw()
 ```
+
 ### Conclusion
 
 We explored the relationship between average daily income (in 2017 dollars) and average years in school for women ages 25-34 across 8 geographic regions, and averaged over 45 years. We performed a linear regression across all countries and log-transformed average income to linearize our dataset. Our model estimated a 24.71% increase in mean income for every additional year of education for women ages 25-54. Additionally, our linear model was able to explain `r var_percent_explained` of the variance in our dataset, suggesting further predictors may better explain average income.
