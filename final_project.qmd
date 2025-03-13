@@ -21,6 +21,7 @@ bibliography: references.bib
 
 ```{r load-packages}
 #| output: false
+set.seed(1245124)
 library(tidyverse)
 library(knitr)
 library(gganimate)
@@ -48,7 +49,7 @@ women_longer <- women |>
                values_to = "years_in_school")
 ```
 
-```{r}
+```{r data-clean}
 full_data <- income_longer |> 
   inner_join(women_longer, by = join_by(Year, country))
 
@@ -109,7 +110,7 @@ We hypothesize that nations with women between ages 25 and 34 that have spent mo
 
 ## Data Visualization
 
-```{r}
+```{r initial-visualization}
 full_data |> 
   group_by(country) |> 
   mutate(avg_income = mean(Income), 
@@ -151,7 +152,7 @@ $$Log_{10}(MeanIncome) = 0.3088 + 0.0959*MeanEducation $$
 
 Because we took the base-10 logarithm of the mean income by country, a slope of 0.0959 indicates that income increases by estimate of 24.71% for every additional year of education for women ages 25-54. At 0 years of education, average income is approximately \$2.04.
 
-```{r}
+```{r fit-model}
 regression_model_data <- 
   full_data |> 
   group_by(country) |> 
@@ -164,7 +165,7 @@ kable(tidy(lm_income_educ))
 
 The $Log_{10}$ transformation of average daily income helped to linearize our model shown in the scatterplot below. Like the figure in 2.1, each dot on the graph represents a different country. The x-axis represents the average number of years that women are in school, where the y-axis displays the $Log_{10}$ of the average daily income for a household. To properly display all the data from the years 1970 to 2015, the average of both variables was taken respective to the county and placed on the scatterplot above.
 
-```{r}
+```{r model-vis}
 regression_model_data |> 
   ggplot(aes(x = mean_educ, 
              y = log10(mean_inc))) +
@@ -179,7 +180,7 @@ regression_model_data |>
 
 ## Model Fit
 
-```{R}
+```{r variance-table}
 var_response <- var(log10(regression_model_data$mean_inc))
 var_fitted <- var(lm_income_educ$fitted)
 var_residuals <- var(lm_income_educ$residuals)
@@ -195,7 +196,7 @@ var_table |>
   row_spec(0, bold = TRUE, color = "black")
 ```
 
-```{r}
+```{r var-prop}
 var_prop_explained <- round(var_fitted/var_response,4) * 100
 var_prop_unexplained <- round(var_residuals/var_response,4) * 100
 var_percent_explained <- glue("{var_prop_explained}%")
@@ -213,15 +214,14 @@ model_predict <- predict(lm_income_educ)
 est_sigma <- sigma(lm_income_educ)
 ```
 
-```{r}
+```{r noise-func}
 noise <- function(x, mean = 0, sd){
   x + rnorm(length(x), 
             mean, 
             sd)}
 ```
 
-```{r}
-set.seed(1245124)
+```{r simulated-responses}
 sim_response <- tibble(sim_income_pred = noise(x=model_predict, 
                                                     sd=est_sigma))
 combined_data <- regression_model_data |> 
@@ -229,7 +229,7 @@ combined_data <- regression_model_data |>
   bind_cols(sim_response)
 ```
 
-```{r}
+```{r sim-vis}
 sim_reg_p <- combined_data |>
   ggplot(aes(x = mean_educ, 
              y = sim_income_pred)) + 
@@ -256,7 +256,7 @@ obs_reg_p + sim_reg_p
 
 ### 3.2 
 
-```{r}
+```{r sim-vi}
 sims <- map_dfc(.x = 1:1000,
                 .f = ~ tibble(sim = noise(model_predict, 
                                           sd = est_sigma)
@@ -266,6 +266,7 @@ colnames(sims) <- colnames(sims) |>
   str_replace(pattern = "\\.\\.\\.",
                   replace = "_")
 ```
+
 ```{r}
 sims2 <- regression_model_data |> 
   filter(!is.na(mean_inc), 
