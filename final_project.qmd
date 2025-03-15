@@ -215,14 +215,13 @@ est_sigma <- sigma(lm_income_educ)
 ```
 
 ```{r noise-func}
-noise <- function(x, mean = 0, sd){
-  x + rnorm(length(x), 
-            mean, 
-            sd)}
+rand_error <- function(x, mean = 0, sd){
+  return(x + rnorm(length(x), mean, sd))
+}
 ```
 
 ```{r simulated-responses}
-sim_response <- tibble(sim_income_pred = noise(x=model_predict, 
+sim_response <- tibble(sim_income_pred = rand_error(x=model_predict, 
                                                     sd=est_sigma))
 combined_data <- regression_model_data |> 
   select(mean_educ, mean_inc, country) |> 
@@ -236,8 +235,9 @@ sim_reg_p <- combined_data |>
   geom_point() + 
   geom_smooth(method=lm)+
   labs(x = "Number of Years in School", 
-        y = "Log10(Income)",
-        title = "Simulated Log Income based \non Regression Model" ) + 
+       y = "Log10(Income)",
+       subtitle = "Income and years in school averaged \nacross country")
+       title = "Simulated Log Income based \non Regression Model" ) + 
   theme_bw()
 
 obs_reg_p <- combined_data |> 
@@ -247,25 +247,24 @@ obs_reg_p <- combined_data |>
   geom_smooth(method = lm) +
   labs(x = "Number of Years in School", 
        y = "Log10(Income)",
-              title = "Observed Log Income",
+       title = "Observed Log Income",
        subtitle = "Income and years in school averaged \nacross country") +
   theme_bw()
 
 obs_reg_p + sim_reg_p
 ```
 
+Overall, the two plots are remarkably similar. Both the observed and simulated data follow positive, linear slopes with log-adjusted income values from about 0 to 2. The observed data plot appears to have slightly more variablity in log-adjusted income values, and its regression line seems to be steeper than that of the simulated data regression line.
+
+
 ### 3.2
 
-<<<<<<< HEAD
 ```{r sim-vi}
-=======
-```{r}
 # functions for this section were obtained from the textbook
 # https://manncz.github.io/stat331-calpoly-text/10-predictive-checks.html#ch10-checkins 
 
->>>>>>> a95e2b291c25afa71507705e97d26e00bc797844
 sims <- map_dfc(.x = 1:1000,
-                .f = ~ tibble(sim = noise(model_predict, 
+                .f = ~ tibble(sim = rand_error(model_predict, 
                                           sd = est_sigma)
                               )
                 )
