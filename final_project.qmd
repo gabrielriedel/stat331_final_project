@@ -207,20 +207,16 @@ The percent of variability explained by the model is `r var_percent_explained`. 
 
 ## Simulation
 
-### 3.1
+### Visualizing Simulations from the Model
 
-```{r}
+```{r sim-setup}
 model_predict <- predict(lm_income_educ)
 est_sigma <- sigma(lm_income_educ)
-```
 
-```{r noise-func}
 rand_error <- function(x, mean = 0, sd){
   return(x + rnorm(length(x), mean, sd))
 }
-```
 
-```{r simulated-responses}
 sim_response <- tibble(sim_income_pred = rand_error(x=model_predict, 
                                                     sd=est_sigma))
 combined_data <- regression_model_data |> 
@@ -236,7 +232,7 @@ sim_reg_p <- combined_data |>
   geom_smooth(method=lm)+
   labs(x = "Number of Years in School", 
        y = "Log10(Income)",
-       subtitle = "Income and years in school averaged \nacross country")
+       subtitle = "Income and years in school averaged \nacross country",
        title = "Simulated Log Income based \non Regression Model" ) + 
   theme_bw()
 
@@ -254,10 +250,9 @@ obs_reg_p <- combined_data |>
 obs_reg_p + sim_reg_p
 ```
 
-Overall, the two plots are remarkably similar. Both the observed and simulated data follow positive, linear slopes with log-adjusted income values from about 0 to 2. The observed data plot appears to have slightly more variablity in log-adjusted income values, and its regression line seems to be steeper than that of the simulated data regression line.
+Overall, the two plots are largely similar. Both the observed and simulated data follow positive, linear slopes with log-adjusted income values from about 0 to 2. The observed data plot appears to have slightly more variablity in log-adjusted income values, and its regression line seems to be steeper than that of the simulated data regression line.
 
-
-### 3.2
+### Generating Multiple Predicative Checks
 
 ```{r sim-vi}
 # functions for this section were obtained from the textbook
@@ -271,18 +266,14 @@ sims <- map_dfc(.x = 1:1000,
 colnames(sims) <- colnames(sims) |> 
   str_replace(pattern = "\\.\\.\\.",
                   replace = "_")
-```
 
-```{r}
 sims2 <- regression_model_data |> 
   filter(!is.na(mean_inc), 
          !is.na(mean_educ)) |> 
   mutate(log_mean_inc = log10(mean_inc)) |>
   select(log_mean_inc) |> 
   bind_cols(sims)
-```
 
-```{r}
 sim_r_sq <- sims2 |> 
   map(~ lm(log_mean_inc ~ .x, data = sims2)) |> 
   map(glance) |> 
@@ -298,7 +289,11 @@ tibble(sims = sim_r_sq) |>
        y = "",
        subtitle = "Number of Simulated Models") +
   theme_bw()
+avg_var <- round(mean(sim_r_sq),2)*100
 ```
+
+Our distribution of $R^2$ values of simulated datasets is approximately normal, has values between 0.2 and 0.5, and is centered around 0.35. This suggests the data we simulated under this model have low to moderate similarity with our observed data. On average, our simulated data account for `r avg_var`% of the observed variability in the observed log-adjusted income.  
+
 
 ### Conclusion
 
