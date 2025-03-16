@@ -192,7 +192,7 @@ var_table |>
   kable(col.names = c("Metric", "Variance")) |>
   kable_styling(full_width = FALSE, 
                 bootstrap_options = c("striped", "hover")) |>
-  add_header_above(c("Response Variability" = 2)) |>
+  add_header_above(c("Variability" = 2)) |>
   row_spec(0, bold = TRUE, color = "black")
 ```
 
@@ -203,7 +203,9 @@ var_percent_explained <- glue("{var_prop_explained}%")
 var_percent_unexplained <- glue("{var_prop_unexplained}%")
 ```
 
-The percent of variability explained by the model is `r var_percent_explained`. This means our model is accounting for a moderate amount of variability. There is still `r var_percent_unexplained` unexplained by the model, so other factors outside of years in school are influencing this response. Overall, for simple linear regression, our model is of moderate to high quality.
+  Our 'Variability' table shows the variance in our response, fitted, and residual values respectively. In order to find how much of the variability in our reponses is explained by the model, we divide the variance of the fitted values by the variance of the response values. 
+  
+  Doing this math, we find the percent of variability explained by the model is `r var_percent_explained`. This means our model is accounting for a moderate amount of variability. There is still `r var_percent_unexplained` unexplained by the model, so other factors outside of years in school are influencing this response. Overall, for simple linear regression, our model is of moderate to high quality.
 
 ## Simulation
 
@@ -292,7 +294,7 @@ tibble(sims = sim_r_sq) |>
 avg_var <- round(mean(sim_r_sq),2)*100
 ```
 
-Our distribution of $R^2$ values of simulated datasets is approximately normal, has values between 0.2 and 0.5, and is centered around 0.35. This suggests the data we simulated under this model have low to moderate similarity with our observed data. On average, our simulated data account for `r avg_var`% of the observed variability in the observed log-adjusted income.  
+Our distribution of $R^2$ values of simulated datasets is approximately normal, has values between 0.2 and 0.5, and is centered around 0.35. This suggests the data we simulated under this model have low to moderate similarity with our observed data. On average, our simulated data account for `r avg_var`% of the variability in the observed log-adjusted income.  
 
 
 ### Conclusion
